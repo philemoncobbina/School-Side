@@ -9,6 +9,7 @@ const SideBar = () => {
     { name: 'Admissions', key: 'admissions', path: '/dashboard/admissions' },
     { name: 'Tickets', key: 'tickets', path: '/dashboard/tickets' },
     { name: 'Job Post', key: 'jobpost', path: '/dashboard/jobpost' },
+    { name: 'Job Application', key: 'jobapplication', path: '/dashboard/jobapplication' },
   ];
 
   return (

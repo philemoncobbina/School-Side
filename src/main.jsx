@@ -24,6 +24,7 @@ import UseradminPage from './Pages/UseradminPage';
 import JobpostPage from './Pages/JobpostPage';
 import JobPostEditPage from './Pages/JobPostEditPage';
 import Addjobpost from './Pages/Addjobpost';
+import Jobapplicationpage from './Pages/Jobapplicationpage';
 
 
 const router = createBrowserRouter([
@@ -95,6 +96,10 @@ const router = createBrowserRouter([
       {
         path: 'jobpost/new',
         element: <Addjobpost />,
+      },
+      {
+        path: 'jobapplication',
+        element: <Jobapplicationpage />,
       },
       {
         path: 'reservations/edit/:id',

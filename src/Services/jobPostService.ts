@@ -20,6 +20,7 @@ export interface JobPost {
     created_by: number;
     created_at: string;
     reference_number: string;
+    applications_count: string;
     updated_at: string;
     scheduled_date: string | null;
     published_date: string | null;

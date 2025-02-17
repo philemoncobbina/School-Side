@@ -129,7 +129,6 @@ const JobPostsTable = () => {
         </div>
         
         <div className="overflow-x-auto">
-          {/* Rest of the table code remains the same */}
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-100">
@@ -145,7 +144,12 @@ const JobPostsTable = () => {
               {filteredPosts.map((post) => (
                 <tr key={post.id} className="group hover:bg-gray-50">
                   <td className="px-6 py-4 text-sm text-gray-600">
-                    {post.reference_number}
+                    <div className="relative">
+                      <span className="absolute -top-2 right-0 bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">
+                        {Math.round(post.applications_count)}
+                      </span>
+                      <span className="block pt-2">{post.reference_number}</span>
+                    </div>
                   </td>
                   <td className="px-6 py-4 text-sm font-medium text-gray-900">
                     {post.title}
