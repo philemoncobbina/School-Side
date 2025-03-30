@@ -74,7 +74,7 @@ const TicketsList = () => {
   };
 
   const handleEdit = (ticket) => {
-    navigate(`/dashboard/ticket/edit/${ticket.id}`);
+    navigate(`/dashboard/tickets/edit/${ticket.id}`);
   };
 
   const openDeleteModal = (ticket) => {

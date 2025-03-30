@@ -27,8 +27,11 @@ const JobPostsTable = () => {
     try {
       setLoading(true);
       const data = await JobPostService.getAllPosts();
+      console.log('API returned data:', data); // Check what's coming from API
       setPosts(data);
+      console.log('Posts state after setting:', posts); // This might show old state due to closure
     } catch (err) {
+      console.error('Error loading posts:', err);
       setError('Failed to load job posts');
     } finally {
       setLoading(false);

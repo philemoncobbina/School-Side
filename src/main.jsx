@@ -111,7 +111,7 @@ const router = createBrowserRouter([
         element: <EditReservation />,
       },
       {
-        path: 'ticket/edit/:id',
+        path: 'tickets/edit/:id',
         element: <TicketEditpage />,
       },
       {

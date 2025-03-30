@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:8000/api/';
+const API_URL = 'https://api.plvcmonline.uk/api/';
 
 // Helper function to get authorization headers
 export const getAuthHeaders = (): { Authorization: string } => {
@@ -89,7 +89,7 @@ export const startTestSessionTimer = () => {
     } else {
       console.log('Session timeout: User is already logged out.');
     }
-  }, 33 * 60 * 1000); // 1 minute
+  }, 60 * 60 * 1000); // 1 minute
 };
 
 // Helper function to start an idle timer (40 seconds)
@@ -106,7 +106,7 @@ export const startIdleTimer = () => {
       } else {
         console.log('Idle timeout: User is already logged out.');
       }
-    }, 33 * 60 * 1000); // 40 seconds
+    }, 60 * 60 * 1000); // 40 seconds
   };
 
   // Reset the idle timer on user interaction

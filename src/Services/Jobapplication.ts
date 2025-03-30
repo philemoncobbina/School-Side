@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'https://api.plvcmonline.uk/api';
 
 // Get authentication headers
 const getAuthHeaders = () => {
@@ -26,6 +26,7 @@ export interface JobApplication {
     last_name: string;
     email: string;
     educational_level: EducationalLevel;
+    last_modified_by?: number;
 }
 
 export interface CreateJobApplicationDTO {
@@ -43,6 +44,15 @@ export interface UpdateJobApplicationDTO {
     first_name?: string;
     last_name?: string;
     email?: string;
+}
+
+export interface JobApplicationLog {
+    id: number;
+    application: number;
+    user?: number;
+    user_email: string;
+    changed_fields: string;
+    timestamp: string;
 }
 
 class JobApplicationService {
@@ -94,6 +104,40 @@ class JobApplicationService {
 
     deleteApplication(id: number) {
         return this.request<void>('DELETE', `${API_BASE_URL}/job-applications/${id}/`, null, getAuthHeaders());
+    }
+
+    // New methods for the logging system
+    getApplicationLogs(applicationId: number) {
+        return this.request<JobApplicationLog[]>(
+            'GET', 
+            `${API_BASE_URL}/job-applications/${applicationId}/logs/`, 
+            null, 
+            getAuthHeaders()
+        );
+    }
+
+    // Optional: Method to get all logs (if needed for admin purposes)
+    getAllLogs() {
+        return this.request<JobApplicationLog[]>(
+            'GET',
+            `${API_BASE_URL}/job-application-logs/`,
+            null,
+            getAuthHeaders()
+        );
+    }
+
+    // Optional: Method to filter logs by user, date range, etc.
+    filterLogs(filters: { user_email?: string, from_date?: string, to_date?: string }) {
+        const queryParams = new URLSearchParams();
+        
+        if (filters.user_email) queryParams.append('user_email', filters.user_email);
+        if (filters.from_date) queryParams.append('from_date', filters.from_date);
+        if (filters.to_date) queryParams.append('to_date', filters.to_date);
+        
+        const queryString = queryParams.toString();
+        const url = `${API_BASE_URL}/job-application-logs/${queryString ? `?${queryString}` : ''}`;
+        
+        return this.request<JobApplicationLog[]>('GET', url, null, getAuthHeaders());
     }
 }
 
