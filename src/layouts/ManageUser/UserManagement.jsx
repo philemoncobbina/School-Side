@@ -3,6 +3,7 @@ import { FaSearch, FaEllipsisH } from 'react-icons/fa';
 import { fetchAllUsers, blockUser, unblockUser, editUser, deleteUser, activateUser } from '../../Services/AdminUserService';
 import EditUserModal from './EditUserModal';
 import { format } from 'date-fns';
+import studentAuthService from '../../Services/studentAuthService';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
@@ -14,6 +15,8 @@ const UserManagement = () => {
         last_name: '',
         email: '',
         role: '',
+        index_number: '',
+        class_name: '',
     });
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -103,20 +106,19 @@ const UserManagement = () => {
     };
 
     const handleEditUser = (user) => {
-    setSelectedUser(user);
-    console.log('Email:', user.date_joined);
-    
-
-    setFormData({
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        role: user.role || '',
-    });
-    
-    setEditMode(true);
-    
-};
+        setSelectedUser(user);
+        
+        setFormData({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            role: user.role || '',
+            index_number: user.index_number || '',
+            class_name: user.class_name || '',
+        });
+        
+        setEditMode(true);
+    };
 
     const handleSaveUser = async () => {
         try {
@@ -124,6 +126,13 @@ const UserManagement = () => {
             if (!dataToSubmit.role) {
                 delete dataToSubmit.role;
             }
+            
+            // Only include student fields if role is student
+            if (dataToSubmit.role !== 'student') {
+                delete dataToSubmit.index_number;
+                delete dataToSubmit.class_name;
+            }
+            
             await editUser(selectedUser.id, dataToSubmit);
             setEditMode(false);
             loadUsers();
@@ -140,12 +149,11 @@ const UserManagement = () => {
     };
     
     const formatLastLogin = (dateString) => {
-    if (!dateString) {
-        return '';  // Return an empty string when there is no date
-    }
-    return format(new Date(dateString), 'MMMM d, yyyy, h:mm a');
-};
-
+        if (!dateString) {
+            return '';  // Return an empty string when there is no date
+        }
+        return format(new Date(dateString), 'MMMM d, yyyy, h:mm a');
+    };
 
     return (
         <div className="p-6 bg-gray-50">
@@ -190,7 +198,14 @@ const UserManagement = () => {
                                 <tr key={user.id} className="hover:bg-gray-50 transition duration-150 ease-in-out">
                                     <td className="px-6 py-4">{`${user.first_name} ${user.last_name}`}</td>
                                     <td className="px-6 py-4">{user.email}</td>
-                                    <td className="px-6 py-4">{user.role || <span className="italic">Not Assigned</span>}</td>
+                                    <td className="px-6 py-4">
+                                        {user.role || <span className="italic">Not Assigned</span>}
+                                        {user.role === 'student' && user.class_name && (
+                                            <span className="ml-2 text-xs text-gray-500">
+                                                ({getClassLabel(user.class_name)})
+                                            </span>
+                                        )}
+                                    </td>
                                     <td className="px-6 py-4">{renderStatusBadge(user)}</td>
                                     <td className="px-6 py-4">
                                         {user.is_blocked ? (
@@ -271,6 +286,13 @@ const UserManagement = () => {
             
         </div>
     );
+};
+
+// Helper function to get class label from class value
+const getClassLabel = (classValue) => {
+    const classOptions = studentAuthService.getClassOptions();
+    const classOption = classOptions.find(option => option.value === classValue);
+    return classOption ? classOption.label : classValue;
 };
 
 const renderStatusBadge = (user) => {

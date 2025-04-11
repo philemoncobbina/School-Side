@@ -26,6 +26,7 @@ import JobPostEditPage from './Pages/JobPostEditPage';
 import Addjobpost from './Pages/Addjobpost';
 import Jobapplicationpage from './Pages/Jobapplicationpage';
 import EditJobapplicationpage from './Pages/EditJobapplicationpage';
+import StudentAuthPage from './Pages/StudentAuthPage';
 
 
 const router = createBrowserRouter([
@@ -50,6 +51,14 @@ const router = createBrowserRouter([
     element: (
       <RequirePrincipalAuth>
         <UseradminPage />
+      </RequirePrincipalAuth>
+    ),
+  },
+  {
+    path: '/create-student',
+    element: (
+      <RequirePrincipalAuth>
+        <StudentAuthPage />
       </RequirePrincipalAuth>
     ),
   },
